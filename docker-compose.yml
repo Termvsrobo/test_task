@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: "termvsrobo"
+      POSTGRES_USER: "termvsrobo"
+      POSTGRES_PASSWORD: "termvsrobo"
+    ports:
+      - "5432:5432"
+    networks:
+    - turreta_network
+  pgadmin4:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: termvsrobo@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: termvsrobo
+    ports:
+    - "8889:80"
+    networks:
+    - turreta_network
+    container_name: pg_admin
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+    - DB_NAME=termvsrobo
+    - DB_USERNAME=termvsrobo
+    - DB_PASSWORD=termvsrobo
+    - DB_HOST=db
+    - DB_PORT=5432
+    ports:
+    - "8000:8000"
+    depends_on:
+      - db
+    networks:
+    - turreta_network
+
+networks:
+  turreta_network:
+    driver: bridge
