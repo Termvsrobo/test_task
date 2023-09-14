@@ -35,6 +35,19 @@ services:
       - db
     networks:
     - turreta_network
+  migration:
+    build: .
+    command: python manage.py migrate
+    environment:
+    - DB_NAME=termvsrobo
+    - DB_USERNAME=termvsrobo
+    - DB_PASSWORD=termvsrobo
+    - DB_HOST=db
+    - DB_PORT=5432
+    depends_on:
+      - db
+    networks:
+    - turreta_network
 
 networks:
   turreta_network:
